@@ -26,13 +26,14 @@ namespace moneyform
 
             // use a bindinglist for our DataGridView as it has some additional events that fire when values change.
             var expenses = new BindingList<KeyValuePair<string, double>>();
-            //bind _expenses to the DataGridView
+            //bind expenses to the DataGridView
             BreakDownDGV.DataSource = expenses;
 
             // populate the combo box with a new item for every type of expense
             foreach (var name in Enum.GetNames(typeof(ExpenseType)))
             {
                 ExpenseCB.Items.Add(name);
+                // also adds an empty value to the DataGridView model
                 expenses.Add(new KeyValuePair<string, double>(name, 0));
             }
             // set the current combo box item to 0 so that it's not blank
