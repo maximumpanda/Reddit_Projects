@@ -64,7 +64,6 @@ namespace moneyform
 
         //  we need to update the model of the DataGridView to match changes to our expenses.
         // because we want the to show a text value for the expense types, we need to do some ugly collection work.
-        // really not happy with this, might revisit.
         private void GenerateBreakDown()
         {
             // Alternative 1
@@ -86,34 +85,6 @@ namespace moneyform
                 new BindingSource(
                     _money.ExpenseList.GroupBy(x => x.Type)
                         .Select(y => new {Type = y.Key, value = y.Sum(z => z.Amount)}), null);
-
-            //Original method. I dislike it greatly, but will leave as an example of another way to solve this
-            // create a new model.
-            /* 
-            var newExpenses = new BindingList<KeyValuePair<string, double>>();
-            foreach (var name in Enum.GetNames(typeof(ExpenseType)))
-            {
-                newExpenses.Add(new KeyValuePair<string, double>(name, 0));
-            }
-            // for every expense
-            foreach (var expense in _money.ExpenseList)
-            {
-                // find the appropriate keypair
-                for (var i = 0; i < Enum.GetNames(typeof(ExpenseType)).Length; i++)
-                {
-                    // if it's the right keypair, take the current value, add the expense amount, and alter the KeyValuePair to reflect the new expense.
-                    if (newExpenses[i].Key == Enum.GetName(typeof(ExpenseType), expense.Type))
-                    {
-                        // keyvaluepairs are immutable, so you need to make a new one every time you change the value
-                        newExpenses[i] =
-                            new KeyValuePair<string, double>(Enum.GetName(typeof(ExpenseType), expense.Type),
-                                newExpenses[i].Value + expense.Amount);
-                    }
-                }
-            }
-            // we are done, so overwrite the old model with the new one
-            BreakDownDGV.DataSource = newExpenses;
-            */
         }
     }
 }
