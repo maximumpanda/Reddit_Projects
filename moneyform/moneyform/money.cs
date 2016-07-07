@@ -5,8 +5,8 @@ namespace moneyform
 {
     public class Money
     {
-        public readonly List<ExpenseRecord> ExpenseList = new List<ExpenseRecord>();
         // I cut down to 2 lists to store all the data.
+        public readonly List<ExpenseRecord> ExpenseList = new List<ExpenseRecord>();
         public readonly List<double> IncomeList = new List<double>();
 
         //unique method for income
