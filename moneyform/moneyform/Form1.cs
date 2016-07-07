@@ -17,6 +17,8 @@ namespace moneyform
     public partial class Form1 : Form
     {
         // initialize _money so that we can work with it.
+        // naming wise, "_" notes that this is readonly, meaning that once it's initialized, you cannot change it's reference.
+        // you can however change it's non-readonly attributes (such as IncomeList).
         private readonly Money _money = new Money();
 
 
@@ -59,15 +61,19 @@ namespace moneyform
             // update balance, Total income, and Breakdown components
             RecalculateTotals();
         }
-
+        
+        // used to update the new values of balance, total income, and the breakdown chart.
         private void RecalculateTotals()
         {
+            // setting the CultureInfo is largely unneccessary, but my style definitions from work were complaining about them.
             BalanceTB.Text = _money.Balance().ToString(CultureInfo.CurrentCulture);
             TotalIncomeTB.Text = _money.IncomeList.Sum().ToString(CultureInfo.CurrentCulture);
             GenerateBreakDown();
         }
 
-        //  we need to update the model of the DataGridView to match our expenses.
+        //  we need to update the model of the DataGridView to match changes to our expenses.
+        // because we want the to show a text value for the expense types, we need to do some ugly collection work.
+        // really not happy with this, might revisit.
         private void GenerateBreakDown()
         {
             // create a new model.
@@ -82,6 +88,7 @@ namespace moneyform
                 // find the appropriate keypair
                 for (var i = 0; i < Enum.GetNames(typeof(ExpenseType)).Length; i++)
                 {
+                    // if it's the right keypair, take the current value, add the expense amount, and alter the KeyValuePair to reflect the new expense.
                     if (newExpenses[i].Key == Enum.GetName(typeof(ExpenseType), expense.Type))
                     {
                         // keyvaluepairs are immutable, so you need to make a new one every time you change the value
